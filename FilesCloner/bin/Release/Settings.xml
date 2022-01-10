@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SettingsManager>
+  <SourceDis></SourceDis>
+  <TargetDis></TargetDis>
+  <OverWriteBool>False</OverWriteBool>
+  <CopyMainBool>False</CopyMainBool>
+  <CopySubfoldersBool>False</CopySubfoldersBool>
+  <CloneAllFilesBool>False</CloneAllFilesBool>
+  <DelAllFilesBool>False</DelAllFilesBool>
+  <DelAllTargetFilesBefore>False</DelAllTargetFilesBefore>
+  <DelAllSourceFilesAfter>False</DelAllSourceFilesAfter>
+</SettingsManager>
