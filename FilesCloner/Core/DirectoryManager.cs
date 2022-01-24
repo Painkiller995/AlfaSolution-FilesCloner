@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using FilesCloner.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,6 +54,42 @@ namespace FilesCloner.Core
             }
             return Sub;
         }
+
+        public List<FileModel> TreeOfFiles(string Dir, string FilesExt = "*.*", Boolean AllDirectories = false)
+        {
+            List<FileModel> ListofFiles = new List<FileModel>();
+            try
+            {
+                if (Directory.Exists(Dir))
+                {
+                    string[] allfiles;
+                    if (AllDirectories) 
+                    { 
+                    allfiles = Directory.GetFiles(Dir, FilesExt, SearchOption.AllDirectories);
+                    }
+                    else
+                    {
+                    allfiles =  Directory.GetFiles(Dir, FilesExt, SearchOption.TopDirectoryOnly);
+                    }       
+                    foreach (string zFile in allfiles)
+                    {
+                        FileModel xFile = new FileModel();
+                        xFile.FilePath = zFile;
+                        xFile.FileName = Path.GetFileName(zFile);
+                        xFile.FileExtension = Path.GetExtension(zFile);
+                        xFile.DirectoryName = Path.GetDirectoryName(zFile);            
+                        ListofFiles.Add(xFile);
+                    }
+                }
+                return ListofFiles;
+            }
+            catch
+            {
+                Console.WriteLine("Directory does not exist!");
+                return ListofFiles;
+            }
+        }
+
 
     }
 

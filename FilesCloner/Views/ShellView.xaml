@@ -149,7 +149,7 @@
             <!--  Row 2 -->
 
             <!--  Row 3 -->
-            <CheckBox x:Name="CopySubfoldersBool" Grid.Column="1"  Grid.Row="3" Margin="10 10 10 0 " >Clone all subfolders also (deep one)</CheckBox>
+            <CheckBox x:Name="CopySubfoldersBool" Grid.Column="1"  Grid.Row="3" Margin="10 10 10 0 " >Include subfolders</CheckBox>
             <!--  Row 3 -->
 
             <!--  Row 4 -->

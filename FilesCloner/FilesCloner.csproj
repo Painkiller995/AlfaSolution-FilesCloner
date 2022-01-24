@@ -96,8 +96,7 @@
     <Compile Include="Core\DirectoryManager.cs" />
     <Compile Include="Core\ExtensionsManager.cs" />
     <Compile Include="Core\SettingsManager.cs" />
-    <Compile Include="Models\File.cs" />
-    <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\FileModel.cs" />
     <Compile Include="ViewModels\AddExtViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
