@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using ControlzEx.Theming;
 using FilesCloner.Core;
 using System;
 using System.Collections.Generic;
@@ -13,33 +12,37 @@ namespace FilesCloner.ViewModels
     class SettingsViewModel : Screen
     {
 
+
+
         private List<string> _ListOfThemes;
         private string _SelectedTheme;
         public List<string> ListOfThemes
         {
             get { return _ListOfThemes; }
-            set { 
+            set
+            {
                 _ListOfThemes = value;
                 NotifyOfPropertyChange(() => ListOfThemes);
-                }
+            }
         }
-        public string  SelectedTheme
+        public string SelectedTheme
         {
             get { return _SelectedTheme; }
-            set { 
+            set
+            {
                 _SelectedTheme = value;
                 SetTheme("Theme", SelectedTheme);
                 ApplyTheme(SelectedTheme);
                 NotifyOfPropertyChange(() => ListOfThemes);
                 NotifyOfPropertyChange(() => SelectedTheme);
-                }
+            }
         }
 
 
         ///////////////////////////////////////////////////////////////////
         SettingsManager SettingsManager = new SettingsManager();
         /////////////////////////////////////////////////////////////////// 
-        
+
         public SettingsViewModel()
         {
             ListOfThemes = new List<string>();
@@ -47,7 +50,7 @@ namespace FilesCloner.ViewModels
             ListOfThemes.Add("Light");
             ListOfThemes.Add("Dark");
             if (string.IsNullOrEmpty(ReadTheme("Theme")) == false)
-            {        
+            {
                 SelectedTheme = ReadTheme("Theme");
 
             }
@@ -66,7 +69,7 @@ namespace FilesCloner.ViewModels
             }
         }
 
-        public bool SetTheme(string ThemeKey,string ThemeVal)
+        public bool SetTheme(string ThemeKey, string ThemeVal)
         {
             try
             {
@@ -81,27 +84,32 @@ namespace FilesCloner.ViewModels
         }
 
 
-        public void ApplyTheme (string ThemeVal)
+        public void ApplyTheme(string ThemeVal)
         {
-            if(ThemeVal.ToLower() == "auto") { 
-                ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
-                ThemeManager.Current.SyncTheme();
+
+
+            if (ThemeVal.ToLower() == "auto")
+            {
+                ModernWpf.ThemeManager.Current.ApplicationTheme = null;
+
             }
             else if (ThemeVal.ToLower() == "light")
             {
-                ThemeManager.Current.ChangeTheme(Application.Current, "Light.Blue");            
+                ModernWpf.ThemeManager.Current.ApplicationTheme = ModernWpf.ApplicationTheme.Light;
+
             }
             else if (ThemeVal.ToLower() == "dark")
             {
-                ThemeManager.Current.ChangeTheme(Application.Current, "Dark.Blue");
+                ModernWpf.ThemeManager.Current.ApplicationTheme = ModernWpf.ApplicationTheme.Dark;
+
             }
             else
             {
-                ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
-                ThemeManager.Current.SyncTheme();
+                ModernWpf.ThemeManager.Current.ApplicationTheme = null;
+
             }
+
+
         }
-
-
     }
 }

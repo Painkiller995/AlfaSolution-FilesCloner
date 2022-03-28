@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using ControlzEx.Theming;
+
 using FilesCloner.Core;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace FilesCloner.ViewModels
         public List<string> ListOfEXT
         {
             get { return _ListOfEXT; }
-            set 
+            set
             {
                 _ListOfEXT = value;
                 NotifyOfPropertyChange(() => ListOfEXT);
@@ -27,16 +27,18 @@ namespace FilesCloner.ViewModels
         public string NewExtText
         {
             get { return _NewExtText; }
-            set { 
+            set
+            {
                 _NewExtText = value;
                 NotifyOfPropertyChange(() => NewExtText);
             }
         }
-         
-        public  string SelectedExt
+
+        public string SelectedExt
         {
             get { return _SelectedExt; }
-            set { 
+            set
+            {
                 _SelectedExt = value;
                 NotifyOfPropertyChange(() => SelectedExt);
             }
@@ -44,7 +46,7 @@ namespace FilesCloner.ViewModels
 
 
         ///////////////////////////////////////////////////////////////////
-        ExtensionsManager ExtensionsManager  = new ExtensionsManager();
+        ExtensionsManager ExtensionsManager = new ExtensionsManager();
         /////////////////////////////////////////////////////////////////// 
         public AddExtViewModel()
         {
@@ -67,7 +69,7 @@ namespace FilesCloner.ViewModels
         {
             try
             {
-            
+
                 if (!string.IsNullOrWhiteSpace(NewExtText))
                 {
                     ExtensionsManager.addExt(NewExtText);
@@ -83,7 +85,7 @@ namespace FilesCloner.ViewModels
             {
                 MessageBox.Show("Error while adding new ext");
             }
- 
+
         }
 
         public void DelExt()

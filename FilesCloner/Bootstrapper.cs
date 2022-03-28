@@ -24,9 +24,15 @@ namespace FilesCloner
             container.PerRequest<ShellViewModel>();
         }
 
-        protected override async void OnStartup(object sender, StartupEventArgs e)
+        protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            await DisplayRootViewFor<ShellViewModel>();
+            var settings = new Dictionary<string, object>
+            {
+            { "SizeToContent", SizeToContent.Manual },
+            { "Height" , SystemParameters.PrimaryScreenHeight / 1.2 },
+            { "Width"  , SystemParameters.PrimaryScreenWidth / 1.5 },
+            };
+            DisplayRootViewFor<ShellViewModel>(settings);
         }
 
         protected override object GetInstance(Type service, string key)

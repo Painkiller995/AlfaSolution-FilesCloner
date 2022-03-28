@@ -5,6 +5,7 @@
   <OverWriteBool>False</OverWriteBool>
   <CopyMainBool>False</CopyMainBool>
   <CopySubfoldersBool>False</CopySubfoldersBool>
+  <DeleteSubfoldersBool>False</DeleteSubfoldersBool>
   <CloneAllFilesBool>False</CloneAllFilesBool>
   <DelAllFilesBool>False</DelAllFilesBool>
   <DelAllTargetFilesBefore>False</DelAllTargetFilesBefore>

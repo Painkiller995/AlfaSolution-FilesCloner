@@ -1,28 +1,22 @@
-﻿<Controls:MetroWindow x:Class="FilesCloner.Views.AddExtView"
+﻿<Window x:Class="FilesCloner.Views.AddExtView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:FilesCloner.Views"
+        xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"     
         mc:Ignorable="d"
         BorderThickness="1"
-        GlowBrush="#B4B4B4"
-        NonActiveWindowTitleBrush="Transparent"
-        NonActiveGlowBrush="#B4B4B4"
-        WindowTitleBrush="Transparent"
-        TitleForeground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-        Title="Extension Manager" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" MinHeight="200" MinWidth="400" >
+        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+        SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="Window_OnContentRendered"
+        Title="Extension Manager"
+        >
 
-    <Controls:MetroWindow.Resources>
-        <Style TargetType="Controls:WindowButtonCommands" BasedOn="{StaticResource MahApps.Styles.WindowButtonCommands.Base}" >
-            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-            <Setter Property="DarkCloseButtonStyle" Value="{DynamicResource MahApps.Styles.Button.MetroWindow.Close.Dark.Win10}" />
-            <Setter Property="LightCloseButtonStyle" Value="{DynamicResource MahApps.Styles.Button.MetroWindow.Close.Light.Win10}" />
-            <Setter Property="Template" Value="{StaticResource MahApps.Templates.WindowButtonCommands.Win10}" />
-        </Style>
-    </Controls:MetroWindow.Resources>
-    
+
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
         <!-- Main Grid Def-->
         <Grid.ColumnDefinitions>
@@ -76,9 +70,11 @@
             <!--  Row 13 -->
         </Grid.RowDefinitions>
         <!-- Main Grid Def-->
-        <ListView x:Name="ListOfEXT"  Grid.Column="1" Grid.ColumnSpan="2"  Grid.Row="1" BorderThickness="1"   Height="200" Width="300" SelectedItem="{Binding Path= SelectedExt , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" ></ListView>
-        <TextBox  Text="{Binding Path=NewExtText , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="0 5 0 0" Padding="5"  MinWidth="100" ></TextBox>
-        <Button x:Name="AddExt" Grid.Column="1" Grid.Row="3" Margin="0 5 0 0" Padding="5"  MinWidth="100" >Add</Button>
-        <Button x:Name="DelExt" Grid.Column="2" Grid.Row="3" Margin="0 5 0 0" Padding="5"  MinWidth="100" >Delete</Button>
+        <ListBox x:Name="ListOfEXT"  Grid.Column="1" Grid.ColumnSpan="2"  Grid.Row="1" BorderThickness="1"   Height="200" Width="300" SelectedItem="{Binding Path= SelectedExt , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" ></ListBox>
+        <TextBox  Text="{Binding Path=NewExtText , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Margin="0 10 0 0" Padding="5"  MinWidth="100" ></TextBox>
+        <Button x:Name="AddExt" Grid.Column="1" Grid.Row="3" Margin="0 15 0 5" HorizontalAlignment="Center"  MinWidth="100" >Add</Button>
+        <Button x:Name="DelExt" Grid.Column="2" Grid.Row="3" Margin="0 15 0 5" HorizontalAlignment="Center" MinWidth="100" >Delete</Button>
     </Grid>
-</Controls:MetroWindow>
+
+
+</Window>

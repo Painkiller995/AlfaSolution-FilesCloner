@@ -12,10 +12,10 @@ using System.Windows;
 namespace FilesCloner.Core
 {
     // Welcome to the cony engine :-)
-    public partial class CopyEngine  
+    public partial class CopyEngine
     {
         ////////////////////////////////////////////////////////////////////////////////
-        internal delegate void UpdateProgressDelegate(int ProgressPercentage); //Send Data 
+        internal delegate void UpdateProgressDelegate(int ProgressPercentage, string EnInfo); //Send Data 
         internal event UpdateProgressDelegate UpdateProgress; //Send Data 
         ////////////////////////////////////////////////////////////////////////////////
 
@@ -40,6 +40,7 @@ namespace FilesCloner.Core
         private List<string> Engine_DelExt;
         private Boolean Engine_IsItMain;
         private Boolean Engine_CloneSubfolders;
+        private Boolean Engine_DelSubfolders;
         private Boolean Engine_DeleteSource;
         private Boolean Engine_DeleteTarget;
         private Boolean Engine_Overwrite;
@@ -60,20 +61,21 @@ namespace FilesCloner.Core
                             (bwAsync_RunWorkerCompleted);
             m_AsyncWorker.DoWork += new DoWorkEventHandler(bwAsync_DoWork);
         }
- 
-        public void EngineDatarovider(string SourceDis , string TargetDis, List<string>  Subfolders, string SelectedSubFolder, Boolean IsItMain = false, Boolean CloneSubfolders = false , List<string> ext = null, List<string> DelExt = null , Boolean CloneAllFiles = false, Boolean DeleteAllFiles = false , Boolean DeleteSource = false, Boolean DeleteTarget = false, Boolean Overwrite = true)
+
+        public void EngineDatarovider(string SourceDis, string TargetDis, List<string> Subfolders, string SelectedSubFolder, Boolean IsItMain = false, Boolean CloneSubfolders = false, Boolean DelSubfolders = false, List<string> ext = null, List<string> DelExt = null, Boolean CloneAllFiles = false, Boolean DeleteAllFiles = false, Boolean DeleteSource = false, Boolean DeleteTarget = false, Boolean Overwrite = true)
         {
             Engine_SourceDis = SourceDis;
             Engine_TargetDis = TargetDis;
             Engine_Subfolders = Subfolders;
             Engine_IsItMain = IsItMain;
             Engine_CloneSubfolders = CloneSubfolders;
+            Engine_DelSubfolders = DelSubfolders;
             Engine_ext = ext;
             Engine_DelExt = DelExt;
             Engine_DeleteSource = DeleteSource;
             Engine_DeleteTarget = DeleteTarget;
             Engine_Overwrite = Overwrite;
-            Engine_SelectedSubFolder =  SelectedSubFolder;
+            Engine_SelectedSubFolder = SelectedSubFolder;
             Engine_CloneAllFiles = CloneAllFiles;
             Engine_DeleteAllFiles = DeleteAllFiles;
         }
@@ -93,9 +95,10 @@ namespace FilesCloner.Core
             }
         }
 
+
         #region Asynchronous BackgroundWorker Thread
 
-         
+
         public void bnAsync_Click()
         {
             // If the background thread is running then clicking this
@@ -109,7 +112,7 @@ namespace FilesCloner.Core
                     // The cancel will not actually happen until the thread in the
                     // DoWork checks the bwAsync.CancellationPending flag
                     m_AsyncWorker.CancelAsync();
-                } 
+                }
             }
             else
             {
@@ -141,17 +144,18 @@ namespace FilesCloner.Core
             // report progress and check for cancellation.
             BackgroundWorker bwAsync = sender as BackgroundWorker;
             int Percentagelevel = 0;
+            string inf = "";
             //Delete target files before cloning by selected ext if is it true
             if (Engine_DeleteTarget)
             {
-                foreach (string Delext in Engine_DelExt) 
-                { 
-                //List of all ext files in the Target
-                List<FileModel> ListOfFiless =  DirectoryManager.TreeOfFiles(DisChecker(Engine_IsItMain, Engine_TargetDis), "*." +Delext, Engine_CloneSubfolders);
-
-                foreach (FileModel f in ListOfFiless)
+                foreach (string Delext in Engine_DelExt)
                 {
-                        File.Delete(f.FilePath);   
+                    //List of all ext files in the Target
+                    List<FileModel> ListOfFiless = DirectoryManager.TreeOfFiles(DisChecker(Engine_IsItMain, Engine_TargetDis), "*." + Delext, Engine_DelSubfolders);
+
+                    foreach (FileModel f in ListOfFiless)
+                    {
+                        File.Delete(f.FilePath);
                         //Check Canceling Between Missions
                         if (bwAsync.CancellationPending)
                         {
@@ -165,21 +169,22 @@ namespace FilesCloner.Core
                         }
                         //Check Canceling Between Missions
                     }
+                    bwAsync.ReportProgress(Percentagelevel, "Deleting " + Delext);
                 }
             }
             //Delete target files before cloning by selected ext if is it true
 
             /////////////////////////////////////////////////////////////////////////// From 0 to 25 is the deleting stage of the target folder
             Percentagelevel = 25;
-            bwAsync.ReportProgress(Percentagelevel);
+            bwAsync.ReportProgress(Percentagelevel, inf);
             ///////////////////////////////////////////////////////////////////////////
-        
+
             //The Cloning Process
             foreach (string ext in Engine_ext)
             {
                 List<FileModel> ListToCopy = DirectoryManager.TreeOfFiles(DisChecker(Engine_IsItMain, Engine_SourceDis), "*." + ext, Engine_CloneSubfolders);
                 foreach (FileModel FileToCopy in ListToCopy)
-                {            
+                {
                     if (!Directory.Exists(FileToCopy.DirectoryName.Replace(Engine_SourceDis, Engine_TargetDis)))
                     {
                         Directory.CreateDirectory(FileToCopy.DirectoryName.Replace(Engine_SourceDis, Engine_TargetDis));
@@ -188,11 +193,11 @@ namespace FilesCloner.Core
                     {
                         Console.WriteLine("File " + FileToCopy.FilePath.Replace(Engine_SourceDis, Engine_TargetDis) + " is already exist");
                     }
-                    else  
-                    {                  
+                    else
+                    {
                         File.Copy(FileToCopy.FilePath, FileToCopy.FilePath.Replace(Engine_SourceDis, Engine_TargetDis), Engine_Overwrite);
                     }
-     
+
                     //Check Canceling Between Missions
                     if (bwAsync.CancellationPending)
                     {
@@ -205,14 +210,14 @@ namespace FilesCloner.Core
                         return;
                     }
                     //Check Canceling Between Missions
-
+                    bwAsync.ReportProgress(Percentagelevel, "Cloning " + FileToCopy.FileName);
                 }
             }
             //The Cloning Process
 
             /////////////////////////////////////////////////////////////////////////// From 25 to 75 is the copy stage of files
             Percentagelevel = 75;
-            bwAsync.ReportProgress(Percentagelevel);
+            bwAsync.ReportProgress(Percentagelevel, inf);
             ///////////////////////////////////////////////////////////////////////////
 
             //Delete source files after cloning by selected ext if is it true
@@ -227,12 +232,12 @@ namespace FilesCloner.Core
                     foreach (string Delext in Engine_DelExt)
                     {
                         //List of all ext files in the Target
-                        List<FileModel> ListOfFiless = DirectoryManager.TreeOfFiles(DisChecker(Engine_IsItMain, Engine_SourceDis), "*." + Delext, Engine_CloneSubfolders);
-                   
+                        List<FileModel> ListOfFiless = DirectoryManager.TreeOfFiles(DisChecker(Engine_IsItMain, Engine_SourceDis), "*." + Delext, Engine_DelSubfolders);
+
                         foreach (FileModel sf in ListOfFiless)
                         {
                             File.Delete(sf.FilePath);
-               
+
                             //Check Canceling Between Missions
                             if (bwAsync.CancellationPending)
                             {
@@ -245,7 +250,7 @@ namespace FilesCloner.Core
                                 return;
                             }
                             //Check Canceling Between Missions
-
+                            bwAsync.ReportProgress(Percentagelevel, "Deleting " + Delext);
                         }
                     }
                 }
@@ -253,12 +258,12 @@ namespace FilesCloner.Core
             //Delete source files after cloning by selected ext if is it true
             /////////////////////////////////////////////////////////////////////////// From 75 to 100 is the deleting stage of source folder if is it true
             Percentagelevel = 100;
-            bwAsync.ReportProgress(Percentagelevel);
+            bwAsync.ReportProgress(Percentagelevel, inf);
             ///////////////////////////////////////////////////////////////////////////
         }
 
-        private void bwAsync_RunWorkerCompleted (object sender, RunWorkerCompletedEventArgs e)
-        { 
+        private void bwAsync_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             // The background process is complete. We need to inspect
             // our response to see if an error occurred, a cancel was
             // requested or if we completed successfully.
@@ -276,22 +281,22 @@ namespace FilesCloner.Core
             if (e.Cancelled)
             {
                 MessageBox.Show("Cancelled...");
-                
+
             }
             else
             {
                 // Everything completed normally.
                 // process the response using e.Result
                 MessageBox.Show("Cloning process is complete");
-                
+
             }
-             
+
             // Reset all percentages
             ProgressPercentageLevel = 0;
-            UpdateProgress(0);
+            UpdateProgress(0, "");
 
         }
- 
+
         private void bwAsync_ProgressChanged
                 (object sender, ProgressChangedEventArgs e)
         {
@@ -302,12 +307,12 @@ namespace FilesCloner.Core
             // that can be used to send other information from the
             // BackgroundThread to the UI thread.
             ProgressPercentageLevel = e.ProgressPercentage;
-           // Console.WriteLine(ProgressPercentageLevel);
-            UpdateProgress(ProgressPercentageLevel);
+            string z = e.UserState.ToString();
+            // Console.WriteLine(ProgressPercentageLevel);
+            UpdateProgress(ProgressPercentageLevel, z);
         }
-   
-        #endregion  
 
+        #endregion
     }
 }
 

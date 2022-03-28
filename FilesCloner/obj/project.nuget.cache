@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "EQ5oJXTwzZlglDgsbk/flXvhP9ErZcR8sNCbLlAD4EwJQeuLr7a/vRXDRYiICGdNSVLGhmwTRlsHnVa9RSiSvw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\fahdd\\source\\repos\\AlfaSolution-FilesCloner\\FilesCloner\\FilesCloner.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\fahdd\\.nuget\\packages\\caliburn.micro\\4.0.173\\caliburn.micro.4.0.173.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\caliburn.micro.core\\4.0.173\\caliburn.micro.core.4.0.173.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\microsoft.windows.sdk.contracts\\10.0.18362.2005\\microsoft.windows.sdk.contracts.10.0.18362.2005.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\modernwpfui\\0.9.4\\modernwpfui.0.9.4.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\system.runtime.serialization.primitives\\4.3.0\\system.runtime.serialization.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\system.runtime.windowsruntime\\4.6.0\\system.runtime.windowsruntime.4.6.0.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\system.runtime.windowsruntime.ui.xaml\\4.6.0\\system.runtime.windowsruntime.ui.xaml.4.6.0.nupkg.sha512",
+    "C:\\Users\\fahdd\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

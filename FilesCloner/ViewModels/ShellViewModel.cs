@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using FilesCloner.Core;
 using System.Windows;
 using System.IO;
-using MahApps.Metro.Controls.Dialogs;
-using ControlzEx.Theming;
-using MahApps;
+
 
 namespace FilesCloner.ViewModels
 {
@@ -22,11 +20,11 @@ namespace FilesCloner.ViewModels
         /// User configuration manager
         SettingsManager Loader = new SettingsManager();
         /// User configuration manager
-  
+
         /// DirectoryManager
         DirectoryManager DirectoryManager = new DirectoryManager();
         /// DirectoryManager
-        
+
         /// Cloner
         CopyEngine Cloner = new CopyEngine();
         /// Cloner
@@ -46,20 +44,22 @@ namespace FilesCloner.ViewModels
         private bool _OverWriteBool;
         private bool _MainBool;
         private bool _CopySubfoldersBool;
+        private bool _DeleteSubfoldersBool;
         private bool _DelAllTargetFilesBefore;
         private bool _DelAllSourceFilesAfter;
         private bool _CloneAllFilesBool;
         private bool _DelAllFilesBool;
         private string _SelectedSubFolder;
         private int _ProgBarVal;
-
+        private string _LogInfo;
+        
         public string SourceDis
         {
             get { return _SourceDis; }
             set
             {
                 _SourceDis = value;
-                Loader.WriteVal(MainKey:"SourceDis", Val:SourceDis);
+                Loader.WriteVal(MainKey: "SourceDis", Val: SourceDis);
                 NotifyOfPropertyChange(() => SourceDis);
                 SubfoldersRefresher();
                 NotifyOfPropertyChange(() => Subfolders);
@@ -89,7 +89,8 @@ namespace FilesCloner.ViewModels
         public List<string> ListOfExt
         {
             get { return _ListOfExt; }
-            set { 
+            set
+            {
                 _ListOfExt = value;
                 NotifyOfPropertyChange(() => ListOfExt);
 
@@ -121,78 +122,106 @@ namespace FilesCloner.ViewModels
         public bool OverWriteBool
         {
             get { return _OverWriteBool; }
-            set { 
+            set
+            {
                 _OverWriteBool = value;
                 Loader.WriteVal(MainKey: "OverWriteBool", Val: OverWriteBool.ToString());
                 NotifyOfPropertyChange(() => OverWriteBool);
-                }
+            }
         }
         public bool MainBool
         {
             get { return _MainBool; }
-            set 
-            { 
+            set
+            {
                 _MainBool = value;
-                Loader.WriteVal(MainKey:"CopyMainBool", Val: MainBool.ToString());
+                Loader.WriteVal(MainKey: "CopyMainBool", Val: MainBool.ToString());
                 NotifyOfPropertyChange(() => MainBool);
             }
         }
         public bool CopySubfoldersBool
         {
             get { return _CopySubfoldersBool; }
-            set {
+            set
+            {
                 _CopySubfoldersBool = value;
-                Loader.WriteVal(MainKey:"CopySubfoldersBool", Val: CopySubfoldersBool.ToString());
+                Loader.WriteVal(MainKey: "CopySubfoldersBool", Val: CopySubfoldersBool.ToString());
                 NotifyOfPropertyChange(() => CopySubfoldersBool);
 
             }
         }
+
+        public bool DeleteSubfoldersBool
+        {
+            get { return _DeleteSubfoldersBool; }
+            set
+            {
+                _DeleteSubfoldersBool = value;
+                Loader.WriteVal(MainKey: "DeleteSubfoldersBool", Val: DeleteSubfoldersBool.ToString());
+                NotifyOfPropertyChange(() => DeleteSubfoldersBool);
+            }
+        }
+
         public bool DelAllTargetFilesBefore
         {
             get { return _DelAllTargetFilesBefore; }
-            set { 
+            set
+            {
                 _DelAllTargetFilesBefore = value;
-                Loader.WriteVal( MainKey: "DelAllTargetFilesBefore", Val: DelAllTargetFilesBefore.ToString());
+                Loader.WriteVal(MainKey: "DelAllTargetFilesBefore", Val: DelAllTargetFilesBefore.ToString());
                 NotifyOfPropertyChange(() => DelAllTargetFilesBefore);
             }
         }
         public bool DelAllSourceFilesAfter
         {
             get { return _DelAllSourceFilesAfter; }
-            set { 
+            set
+            {
                 _DelAllSourceFilesAfter = value;
                 Loader.WriteVal(MainKey: "DelAllSourceFilesAfter", Val: DelAllSourceFilesAfter.ToString());
                 NotifyOfPropertyChange(() => DelAllSourceFilesAfter);
-                }
+            }
         }
 
         public bool CloneAllFilesBool
         {
             get { return _CloneAllFilesBool; }
-            set { 
+            set
+            {
                 _CloneAllFilesBool = value;
                 Loader.WriteVal(MainKey: "CloneAllFilesBool", Val: CloneAllFilesBool.ToString());
                 NotifyOfPropertyChange(() => CloneAllFilesBool);
-               }
+            }
         }
-        
+
         public bool DelAllFilesBool
         {
             get { return _DelAllFilesBool; }
-            set { 
+            set
+            {
                 _DelAllFilesBool = value;
                 Loader.WriteVal(MainKey: "DelAllFilesBool", Val: DelAllFilesBool.ToString());
                 NotifyOfPropertyChange(() => DelAllFilesBool);
             }
         }
 
-
         public int ProgBarVal
         {
             get { return _ProgBarVal; }
-            set {
+            set
+            {
                 _ProgBarVal = value;
                 NotifyOfPropertyChange(() => ProgBarVal);
+            }
+        }
+
+        public string LogInfo
+        {
+            get { return _LogInfo; }
+            set
+            {
+                _LogInfo = value;
+                NotifyOfPropertyChange(() => LogInfo);
             }
         }
 
@@ -204,19 +233,20 @@ namespace FilesCloner.ViewModels
             {
 
                 SettingsReader();
- 
+
             }
-            catch 
+            catch
             {
-            Console.WriteLine("Error while trying to load all settings");
+                Console.WriteLine("Error while trying to load all settings");
             }
 
             Cloner.UpdateProgress += UpdateProgress;
         }
 
-        private void UpdateProgress(int ProgressPercentage)
+        private void UpdateProgress(int ProgressPercentage, string EnInfo)
         {
             ProgBarVal = ProgressPercentage;
+            LogInfo = EnInfo;
         }
 
         ///////////////////// SettingsReader /////////////////////
@@ -224,7 +254,7 @@ namespace FilesCloner.ViewModels
         {
             switch (input.ToLower())
             {
-                case "true":          
+                case "true":
                     return true;
                 default:
                     return false;
@@ -233,22 +263,24 @@ namespace FilesCloner.ViewModels
         public void SettingsReader()
         {
             //Try to Read Settings
-            if (Loader.SettingsChecker()) { 
-            SourceDis = Loader.ReadVal("SourceDis");
-            OrginalSubfolders = DirectoryManager.SubFoldersList(SourceDis);
-            TargetDis = Loader.ReadVal("TargetDis");
-            OverWriteBool = ParseBool(Loader.ReadVal("OverWriteBool"));
-            MainBool = ParseBool(Loader.ReadVal("CopyMainBool"));
-            CopySubfoldersBool = ParseBool(Loader.ReadVal("CopySubfoldersBool"));
-            CloneAllFilesBool = ParseBool(Loader.ReadVal("CloneAllFilesBool"));
-            DelAllFilesBool = ParseBool(Loader.ReadVal("DelAllFilesBool"));
-            DelAllTargetFilesBefore = ParseBool(Loader.ReadVal("DelAllTargetFilesBefore"));
-            DelAllSourceFilesAfter = ParseBool(Loader.ReadVal("DelAllSourceFilesAfter"));
-            ListOfExt = ExtensionsManager.ListOfEXT();
-            SubfoldersRefresher();
-            ///////////////////////////////////////////////////////////////
-            SettingsViewModel ThemeReader = new SettingsViewModel();
-            ThemeReader.ApplyTheme(Loader.ReadVal("Theme"));
+            if (Loader.SettingsChecker())
+            {
+                SourceDis = Loader.ReadVal("SourceDis");
+                OrginalSubfolders = DirectoryManager.SubFoldersList(SourceDis);
+                TargetDis = Loader.ReadVal("TargetDis");
+                OverWriteBool = ParseBool(Loader.ReadVal("OverWriteBool"));
+                MainBool = ParseBool(Loader.ReadVal("CopyMainBool"));
+                CopySubfoldersBool = ParseBool(Loader.ReadVal("CopySubfoldersBool"));
+                DeleteSubfoldersBool = ParseBool(Loader.ReadVal("DeleteSubfoldersBool"));
+                CloneAllFilesBool = ParseBool(Loader.ReadVal("CloneAllFilesBool"));
+                DelAllFilesBool = ParseBool(Loader.ReadVal("DelAllFilesBool"));
+                DelAllTargetFilesBefore = ParseBool(Loader.ReadVal("DelAllTargetFilesBefore"));
+                DelAllSourceFilesAfter = ParseBool(Loader.ReadVal("DelAllSourceFilesAfter"));
+                ListOfExt = ExtensionsManager.ListOfEXT();
+                SubfoldersRefresher();
+                ///////////////////////////////////////////////////////////////
+                SettingsViewModel ThemeReader = new SettingsViewModel();
+                ThemeReader.ApplyTheme(Loader.ReadVal("Theme"));
             }
             else
             {
@@ -256,7 +288,7 @@ namespace FilesCloner.ViewModels
             }
         }
         ///////////////////// SettingsReader /////////////////////
-         
+
         ///////////////////// Refresh The List Of Subfolders /////////////////////
         public void SubfoldersRefresher()
         {
@@ -312,15 +344,15 @@ namespace FilesCloner.ViewModels
 
         }
         ///////////////////// TargetBrowse BTN //////////////////////////////////
-      
+
         ///////////////////// EXT Manager BTN ////////////////////////////////// 
         public void EXTMNG()
         {
 
-            WM.ShowDialogAsync(new AddExtViewModel(),null,null);
+            WM.ShowDialogAsync(new AddExtViewModel(), null, null);
             //Read All Ext Settings Again
             ListOfExt = ExtensionsManager.ListOfEXT();
- 
+
         }
         ///////////////////// EXT Manager BTN //////////////////////////////////
 
@@ -336,7 +368,7 @@ namespace FilesCloner.ViewModels
         ///////////////////// EXT Manager BTN //////////////////////////////////
         public void Refresh()
         {
-            try 
+            try
             {
                 SubfoldersRefresher();
                 UpdateSubfolderList();
@@ -355,25 +387,26 @@ namespace FilesCloner.ViewModels
         {
             try
             {
-            if(MainBool == true || MainBool == false && SelectedSubFolder is object) 
-                { 
-                //Talk to CopyEngine
-                Cloner.EngineDatarovider(
-                SourceDis: SourceDis,
-                TargetDis: TargetDis,
-                Subfolders: Subfolders,
-                SelectedSubFolder: SelectedSubFolder,
-                IsItMain: MainBool,
-                CloneSubfolders: CopySubfoldersBool,
-                ext: ListOfExt,
-                DelExt: ListOfExt,
-                CloneAllFiles: CloneAllFilesBool,
-                DeleteAllFiles: DelAllFilesBool,
-                DeleteSource: DelAllSourceFilesAfter,
-                DeleteTarget: DelAllTargetFilesBefore,
-                Overwrite: OverWriteBool
-                );
-                Cloner.bnAsync_Click();
+                if (MainBool == true || MainBool == false && SelectedSubFolder is object)
+                {
+                    //Talk to CopyEngine
+                    Cloner.EngineDatarovider(
+                    SourceDis: SourceDis,
+                    TargetDis: TargetDis,
+                    Subfolders: Subfolders,
+                    SelectedSubFolder: SelectedSubFolder,
+                    IsItMain: MainBool,
+                    CloneSubfolders: CopySubfoldersBool,
+                    DelSubfolders: DeleteSubfoldersBool,
+                    ext: ListOfExt,
+                    DelExt: ListOfExt,
+                    CloneAllFiles: CloneAllFilesBool,
+                    DeleteAllFiles: DelAllFilesBool,
+                    DeleteSource: DelAllSourceFilesAfter,
+                    DeleteTarget: DelAllTargetFilesBefore,
+                    Overwrite: OverWriteBool
+                    );
+                    Cloner.bnAsync_Click();
                 }
                 else
                 {
@@ -387,6 +420,6 @@ namespace FilesCloner.ViewModels
 
         }
         ///////////////////// Clone BTN ///////////////////////////////////////// 
- 
+
     }
 }
