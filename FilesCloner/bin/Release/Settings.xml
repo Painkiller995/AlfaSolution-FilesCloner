@@ -3,11 +3,12 @@
   <SourceDis></SourceDis>
   <TargetDis></TargetDis>
   <OverWriteBool>True</OverWriteBool>
-  <CopyMainBool>True</CopyMainBool>
-  <CopySubfoldersBool>True</CopySubfoldersBool>
+  <CopyMainBool>False</CopyMainBool>
+  <CopySubfoldersBool>False</CopySubfoldersBool>
   <DeleteSubfoldersBool>True</DeleteSubfoldersBool>
   <CloneAllFilesBool>False</CloneAllFilesBool>
   <DelAllFilesBool>False</DelAllFilesBool>
   <DelAllTargetFilesBefore>True</DelAllTargetFilesBefore>
-  <DelAllSourceFilesAfter>True</DelAllSourceFilesAfter>
+  <DelAllSourceFilesAfter>False</DelAllSourceFilesAfter>
+  <Theme>Light</Theme>
 </SettingsManager>
