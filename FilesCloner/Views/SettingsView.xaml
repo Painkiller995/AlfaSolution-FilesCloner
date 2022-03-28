@@ -103,7 +103,7 @@
                    Margin="0 20"
                    TextWrapping="Wrap" 
                    >
-            Version: 0.3.3 <LineBreak/>
+            Version: 0.3.4 <LineBreak/>
         </TextBlock>
 
     </Grid>

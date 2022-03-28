@@ -29,7 +29,7 @@ namespace FilesCloner
             var settings = new Dictionary<string, object>
             {
             { "SizeToContent", SizeToContent.Manual },
-            { "Height" , SystemParameters.PrimaryScreenHeight / 1.2 },
+            { "Height" , SystemParameters.PrimaryScreenHeight / 1.1 },
             { "Width"  , SystemParameters.PrimaryScreenWidth / 1.5 },
             };
             DisplayRootViewFor<ShellViewModel>(settings);

@@ -159,25 +159,25 @@
 
                 <!--  Row 1 -->
 
+                <!--  Row 1 -->
+                <CheckBox x:Name="MainBool" Grid.Column="2"  Grid.Row="1" Margin="10 10 10 0 " >Clone the main directory files</CheckBox>
+                <!--  Row 1 -->
+
                 <!--  Row 2 -->
-                <CheckBox x:Name="MainBool" Grid.Column="1"  Grid.Row="2" Margin="10 10 10 0 " >Clone the main directory files</CheckBox>
+                <CheckBox x:Name="CopySubfoldersBool" Grid.Column="1"  Grid.Row="2" Margin="10 10 10 0 " >Clone subfolders</CheckBox>
+                <!--  Row 2 -->
+
+                <!--  Row 2 -->
+                <CheckBox x:Name="DeleteSubfoldersBool" Grid.Column="2"  Grid.Row="2" Margin="10 10 10 0 " >Delete subfolders</CheckBox>
                 <!--  Row 2 -->
 
                 <!--  Row 3 -->
-                <CheckBox x:Name="CopySubfoldersBool" Grid.Column="1"  Grid.Row="3" Margin="10 10 10 0 " >Clone subfolders</CheckBox>
+                <CheckBox x:Name="DelAllTargetFilesBefore" Grid.Column="1"  Grid.Row="3" Margin="10 10 10 0 " >Delete all target files before cloning</CheckBox>
                 <!--  Row 3 -->
 
-                <!--  Row 4 -->
-                <CheckBox x:Name="DeleteSubfoldersBool" Grid.Column="1"  Grid.Row="4" Margin="10 10 10 0 " >Delete subfolders</CheckBox>
-                <!--  Row 4 -->
-
-                <!--  Row 5 -->
-                <CheckBox x:Name="DelAllTargetFilesBefore" Grid.Column="1"  Grid.Row="5" Margin="10 10 10 0 " >Delete all target files before cloning</CheckBox>
-                <!--  Row 5 -->
-
-                <!--  Row 6 -->
-                <CheckBox x:Name="DelAllSourceFilesAfter" Grid.Column="1"  Grid.Row="6" Margin="10 10 10 0 " >Delete all source files after cloning</CheckBox>
-                <!--  Row 6 -->
+                <!--  Row 3 -->
+                <CheckBox x:Name="DelAllSourceFilesAfter" Grid.Column="2"  Grid.Row="3" Margin="10 10 10 0 " >Delete all source files after cloning</CheckBox>
+                <!--  Row 3 -->
 
             </Grid>
             <!-- Row 6 -->
