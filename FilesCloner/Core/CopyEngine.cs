@@ -21,12 +21,9 @@ namespace FilesCloner.Core
 
         // We need that to find subfolders of subfilders :-)
         DirectoryManager DirectoryManager = new DirectoryManager();
-        ////////////////////////////////////////////////////////////////////////////////
-        // The BackgroundWorker will be used to perform a long running action
-        // on a background thread.  This allows the UI to be free for painting
-        // as well as other actions the user may want to perform.  The background
-        // thread will use the ReportProgress event to update the ProgressBar
-        // on the UI thread.
+        ////////////////////////////////////////////////////////////////////////////////        
+        
+        ////////////////////////////////////////////////////////////////////////////////       
         private BackgroundWorker m_AsyncWorker = new BackgroundWorker();
         int ProgressPercentageLevel = 0;
         ////////////////////////////////////////////////////////////////////////////////
@@ -101,22 +98,16 @@ namespace FilesCloner.Core
 
         public void bnAsync_Click()
         {
-            // If the background thread is running then clicking this
-            // button causes a cancel, otherwise clicking this button
-            // launches the background thread.
+            
             if (m_AsyncWorker.IsBusy)
             {
                 if (MessageBox.Show("Do you want to interrupt the cloning process?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    // Notify the worker thread that a cancel has been requested.
-                    // The cancel will not actually happen until the thread in the
-                    // DoWork checks the bwAsync.CancellationPending flag
+                {        
                     m_AsyncWorker.CancelAsync();
                 }
             }
             else
             {
-                // Kickoff the worker thread to begin it's DoWork function.
                 m_AsyncWorker.RunWorkerAsync();
             }
         }
@@ -140,8 +131,7 @@ namespace FilesCloner.Core
             }
             /////////////////////////////////////////////////////////////////////////
 
-            // The sender is the BackgroundWorker object we need it to
-            // report progress and check for cancellation.
+
             BackgroundWorker bwAsync = sender as BackgroundWorker;
             int Percentagelevel = 0;
             string inf = "";
@@ -156,14 +146,11 @@ namespace FilesCloner.Core
                     foreach (FileModel f in ListOfFiless)
                     {
                         File.Delete(f.FilePath);
+                        
                         //Check Canceling Between Missions
                         if (bwAsync.CancellationPending)
                         {
-                            // Pause for a bit to demonstrate that there is time between
-                            // "Cancelling..." and "Cancel ed".
                             Thread.Sleep(1200);
-                            // Set the e.Cancel flag so that the WorkerCompleted event
-                            // knows that the process was cancelled.
                             e.Cancel = true;
                             return;
                         }
@@ -201,15 +188,12 @@ namespace FilesCloner.Core
                     //Check Canceling Between Missions
                     if (bwAsync.CancellationPending)
                     {
-                        // Pause for a bit to demonstrate that there is time between
-                        // "Cancelling..." and "Cancel ed".
                         Thread.Sleep(1200);
-                        // Set the e.Cancel flag so that the WorkerCompleted event
-                        // knows that the process was cancelled.
                         e.Cancel = true;
                         return;
                     }
                     //Check Canceling Between Missions
+                    
                     bwAsync.ReportProgress(Percentagelevel, "Cloning " + FileToCopy.FileName);
                 }
             }
@@ -241,15 +225,12 @@ namespace FilesCloner.Core
                             //Check Canceling Between Missions
                             if (bwAsync.CancellationPending)
                             {
-                                // Pause for a bit to demonstrate that there is time between
-                                // "Cancelling..." and "Cancel ed".
                                 Thread.Sleep(1200);
-                                // Set the e.Cancel flag so that the WorkerCompleted event
-                                // knows that the process was cancelled.
                                 e.Cancel = true;
                                 return;
                             }
                             //Check Canceling Between Missions
+                            
                             bwAsync.ReportProgress(Percentagelevel, "Deleting " + Delext);
                         }
                     }
@@ -264,20 +245,13 @@ namespace FilesCloner.Core
 
         private void bwAsync_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // The background process is complete. We need to inspect
-            // our response to see if an error occurred, a cancel was
-            // requested or if we completed successfully.
-            //bnAsync.Text = "Start Long Running Asynchronous Process";
-            //bnAsync.Enabled = true;
-            // Check to see if an error occurred in the
-            // background process.
 
             if (e.Error != null)
             {
                 MessageBox.Show(e.Error.Message);
                 return;
             }
-            // Check to see if the background process was cancelled.
+            // Check if the background process was cancelled.
             if (e.Cancelled)
             {
                 MessageBox.Show("Cancelled...");
@@ -285,10 +259,7 @@ namespace FilesCloner.Core
             }
             else
             {
-                // Everything completed normally.
-                // process the response using e.Result
                 MessageBox.Show("Cloning process is complete");
-
             }
 
             // Reset all percentages
@@ -300,12 +271,6 @@ namespace FilesCloner.Core
         private void bwAsync_ProgressChanged
                 (object sender, ProgressChangedEventArgs e)
         {
-            // This function fires on the UI thread so it's safe to edit
-            // the UI control directly, no funny business with Control.Invoke.
-            // Update the progressBar with the integer supplied to us from the
-            // ReportProgress() function.  Note, e.UserState is a "tag" property
-            // that can be used to send other information from the
-            // BackgroundThread to the UI thread.
             ProgressPercentageLevel = e.ProgressPercentage;
             string z = e.UserState.ToString();
             // Console.WriteLine(ProgressPercentageLevel);
